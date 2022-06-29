@@ -21,6 +21,10 @@ module Tarsnap
     def drop_cmd
       %W[tarsnap -d -f #{@raw_name}]
     end
+
+    def get_cmd
+      %W[tarsnap -x -f #{@raw_name}]
+    end
   end
 
   class Store
@@ -78,6 +82,35 @@ module Tarsnap
       new().drop_old(options) if options[:drop_old]
     end
 
+    def get(options)
+      options[:get].map { |archive_to_get|
+        versions = @archives.filter { |archive| archive.name == archive_to_get }
+        selected_version =
+          if options[:version]
+            versions.find { |archive|
+              archive.date.strftime('%Y-%m-%d') == options[:version]
+            }
+          else
+            versions.max_by(&:date)
+          end
+
+        unless selected_version
+          msg = "Archive '#{archive_to_get}'"
+          msg << " of version #{options[:version]}" if options[:version]
+          msg << " does not exist"
+          warn msg
+        end
+
+        selected_version
+      }.compact.map(&:get_cmd).each do |cmd|
+        if options[:dry_run]
+          p cmd
+        else
+          system(*cmd)
+        end
+      end
+    end
+
     def drop_old(options)
       names_to_drop = options[:files].map { |f| File.basename(f).gsub('-', '_') }
 
@@ -117,13 +150,15 @@ if __FILE__ == $PROGRAM_NAME
   options = {
     dry_run: false,
     drop_old: false,
+    get: [],
+    version: nil,
     files: [],
   }
 
   OptionParser.new { |op|
     name = File.basename($PROGRAM_NAME)
 
-    op.banner = "Usage:\t#{name} [options] FILE..."
+    op.banner = "Usage:\t#{name} [options] [FILE...]"
 
     op.on '-l', '--list', 'List backups' do
       Tarsnap::Store.new().print
@@ -143,6 +178,14 @@ if __FILE__ == $PROGRAM_NAME
       options[:drop_old] = true
     end
 
+    op.on '--get ARCHIVE...', Array, 'Retrieve a backup' do |archives|
+      options[:get] = archives
+    end
+
+    op.on '--version DATE', 'When used with --get, specifies a version of backup to retrieve' do |version|
+      options[:version] = version
+    end
+
     op.on '-h', '--help', 'Display this message' do
       puts op
       exit 0
@@ -151,7 +194,13 @@ if __FILE__ == $PROGRAM_NAME
 
   options[:files] = ARGV
 
-  if options[:files].empty? && options[:drop_old]
+  if options[:version] && options[:get].empty?
+    abort '--version only makes sense for --get'
+  end
+
+  if options[:get].any?
+    Tarsnap::Store.new().get(options)
+  elsif options[:files].empty? && options[:drop_old]
     Tarsnap::Store.new().drop_old(options)
   elsif options[:files].any?
     Tarsnap::Store.add(options)
