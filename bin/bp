@@ -1,3 +1,33 @@
 #!/usr/bin/env ruby
 
 require_relative '../lib/bp'
+
+require 'gli'
+
+class BP::App
+  extend GLI::App
+
+  desc 'Don\'t execute any commands, just show them'
+  switch :'dry-run', negatable: false
+
+  command :get do |c|
+    c.desc 'Specify which version of archive to get'
+    c.flag :version,
+      must_match: /\A\d{4}-\d{2}-\d{2}\z/
+  end
+
+  command :put do |c|
+  end
+
+  command :delete do |c|
+    c.desc 'Specify which versions to delete'
+    c.flag :versions,
+      must_match: %w[old all],
+      default_value: 'old'
+  end
+
+  command :list do |c|
+  end
+end
+
+exit BP::App.run(ARGV)
