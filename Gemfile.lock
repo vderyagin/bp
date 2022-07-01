@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    gli (2.21.0)
+
+PLATFORMS
+  arm64-darwin-21
+
+DEPENDENCIES
+  gli (~> 2.21)
+
+BUNDLED WITH
+   2.3.17
