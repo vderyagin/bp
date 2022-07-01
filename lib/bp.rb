@@ -1,0 +1,1 @@
+require 'bp/version.rb'
