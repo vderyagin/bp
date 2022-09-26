@@ -22,18 +22,18 @@ module Tarsnap
       %W[tarsnap -d -f #{@raw_name}]
     end
 
-    def get_cmd
+    def extract_cmd
       %W[tarsnap -x -f #{@raw_name}]
     end
   end
 
   class Store
-    def initialize()
+    def initialize
       @archives =
-        IO.popen(%w(tarsnap --list-archives))
-        .readlines
-        .map(&:chomp)
-        .map(&Archive.method(:new))
+        IO.popen(%w[tarsnap --list-archives])
+          .readlines
+          .map(&:chomp)
+          .map(&Archive.method(:new))
     end
 
     def print
@@ -66,8 +66,8 @@ module Tarsnap
               '-c',
               '-f',
               "#{date_string}_#{clean_basename}",
-              basename,
-            ],
+              basename
+            ]
           ]
         }.each do |dir, cmd|
           Dir.chdir dir do
@@ -97,12 +97,12 @@ module Tarsnap
         unless selected_version
           msg = "Archive '#{archive_to_get}'"
           msg << " of version #{options[:version]}" if options[:version]
-          msg << " does not exist"
+          msg << ' does not exist'
           warn msg
         end
 
         selected_version
-      }.compact.map(&:get_cmd).each do |cmd|
+      }.compact.map(&:extract_cmd).each do |cmd|
         if options[:dry_run]
           p cmd
         else
@@ -152,7 +152,7 @@ if __FILE__ == $PROGRAM_NAME
     drop_old: false,
     get: [],
     version: nil,
-    files: [],
+    files: []
   }
 
   OptionParser.new { |op|

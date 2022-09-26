@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BP::Archive
   attr_reader :name, :date
 
