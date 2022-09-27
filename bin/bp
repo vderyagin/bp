@@ -15,19 +15,49 @@ class BP::App
     c.desc 'Specify which version of archive to get'
     c.flag :version,
       must_match: /\A\d{4}-\d{2}-\d{2}\z/
+
+    c.action do |global_opts, opts, args|
+      BP::Store.new().get(
+        {
+          get: args,
+          version: opts[:version],
+          dry_run: global_opts[:'dry-run'],
+        }
+      )
+    end
   end
 
   command :put do |c|
+    c.action do |global_opts, _opts, args|
+      BP::Store.add(
+        {
+          files: args,
+          dry_run: global_opts[:'dry-run'],
+        }
+      )
+    end
   end
 
   command :delete do |c|
-    c.desc 'Specify which versions to delete'
-    c.flag :versions,
-      must_match: %w[old all],
-      default_value: 'old'
+    # c.desc 'Specify which versions to delete'
+    # c.flag :versions,
+    #   must_match: %w[old all],
+    #   default_value: 'old'
+
+    c.action do |global_opts, _opts, args|
+      BP::Store.new().drop_old(
+        {
+          files: args,
+          dry_run: global_opts[:'dry-run'],
+        }
+      )
+    end
   end
 
   command :list do |c|
+    c.action do
+      BP::Store.new().print
+    end
   end
 end
 

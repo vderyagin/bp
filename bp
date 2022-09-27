@@ -152,7 +152,7 @@ if __FILE__ == $PROGRAM_NAME
     drop_old: false,
     get: [],
     version: nil,
-    files: []
+    files: [],
   }
 
   OptionParser.new { |op|
