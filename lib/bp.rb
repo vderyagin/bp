@@ -1,5 +1,5 @@
 # typed: strict
-# frozen_string-literal: true
+# frozen_string_literal: true
 
 require_relative './bp/version'
 require_relative './bp/archive'
