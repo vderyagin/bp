@@ -22,7 +22,7 @@ class BP::App
           get: args,
           version: opts[:version],
           dry_run: global_opts[:'dry-run'],
-        }
+        },
       )
     end
   end
@@ -33,7 +33,7 @@ class BP::App
         {
           files: args,
           dry_run: global_opts[:'dry-run'],
-        }
+        },
       )
     end
   end
@@ -49,7 +49,7 @@ class BP::App
         {
           files: args,
           dry_run: global_opts[:'dry-run'],
-        }
+        },
       )
     end
   end

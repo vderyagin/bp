@@ -1,7 +1,7 @@
 # typed: true
 # frozen_string_literal: true
 
-require_relative './archive'
+require_relative 'archive'
 
 class BP::Store
   def initialize
