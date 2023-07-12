@@ -11,6 +11,7 @@ GEM
       racc
     racc (1.7.1)
     rainbow (3.1.1)
+    rake (13.0.6)
     regexp_parser (2.8.1)
     rexml (3.2.5)
     rubocop (1.54.1)
@@ -38,6 +39,7 @@ PLATFORMS
 
 DEPENDENCIES
   gli (~> 2.21)
+  rake (~> 13.0)
   rubocop-rake
 
 BUNDLED WITH
