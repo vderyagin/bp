@@ -88,20 +88,20 @@ class BP::Store
   end
 
   def drop_old(options)
-    names_to_drop = options[:files].map { |f| File.basename(f).gsub('-', '_') }
+    names_to_drop = options[:files].map { |file| File.basename(file).gsub('-', '_') }
 
     @archives
       .filter { |archive| names_to_drop.empty? || names_to_drop.include?(archive.name) }
       .group_by(&:name)
       .map { |name, archives|
-        (*old_archives, latest) = archives.sort_by(&:date)
-        [name, old_archives, latest]
-      }.reject { |_name, old_archives, _latest| old_archives.empty? }
+        (*old, latest) = archives.sort_by(&:date)
+        [name, old, latest]
+      }.reject { |_name, old, _latest| old.empty? }
       .each do |name, old_archives, latest|
         versions_to_drop =
           old_archives
           .map(&:date)
-          .map { |d| d.strftime('%Y-%m-%d') }
+          .map { |date| date.strftime('%Y-%m-%d') }
           .join(', ')
 
         puts "Archive '#{name}'"
