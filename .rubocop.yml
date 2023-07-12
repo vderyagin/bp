@@ -1,0 +1,70 @@
+require: rubocop-rake
+
+AllCops:
+  NewCops: enable
+
+Metrics/BlockLength:
+  AllowedMethods:
+    - refine
+    - describe
+    - context
+
+Metrics/MethodLength:
+  Max: 30
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/BlockDelimiters:
+  EnforcedStyle: semantic
+
+Style/Documentation:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/MethodCallWithoutArgsParentheses:
+  Enabled: false
+
+Style/SignalException:
+  EnforcedStyle: semantic
+
+Style/BlockComments:
+  Enabled: false
+
+Style/MixinUsage:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120
+
+Layout/ArgumentAlignment:
+  Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
+Layout/FirstArrayElementIndentation:
+  Enabled: false
